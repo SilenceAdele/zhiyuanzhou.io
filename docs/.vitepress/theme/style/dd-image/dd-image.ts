@@ -1,4 +1,4 @@
-// 图片查看器功能实现
+// 图片查看器功能重新实现
 // 图片查看器类
 class ImageViewer {
   private viewerWrapper: HTMLElement | null = null;
@@ -17,6 +17,8 @@ class ImageViewer {
   private scale: number = 1;
   private rotation: number = 0;
   private isFullScreen: boolean = false;
+  private isVpDocImage: boolean = false;
+
   private isDragging: boolean = false;
   private dragStartX: number = 0;
   private dragStartY: number = 0;
@@ -27,33 +29,45 @@ class ImageViewer {
     this.init();
   }
 
+  // 初始化 - 监听页面中的图片点击
   private init() {
     if (typeof window === "undefined") return;
 
+    // 等待DOM加载完成
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", this.setupImageListeners.bind(this));
     } else {
       this.setupImageListeners();
     }
 
+    // 监听页面内容更新（如SPA路由切换）
     this.observeDOMChanges();
   }
 
+  // 设置图片点击监听
   private setupImageListeners() {
-    const vpDocElement = document.querySelector(".vp-doc");
-    if (vpDocElement) {
-      const images = vpDocElement.querySelectorAll("img:not(.tk-image-viewer__canvas img)");
-      images.forEach(img => {
-        const htmlImg = img as HTMLImageElement;
-        if (!htmlImg.dataset.imageViewerInitialized) {
-          htmlImg.dataset.imageViewerInitialized = "true";
-          htmlImg.style.cursor = "pointer";
-          htmlImg.addEventListener("click", (e: MouseEvent) => this.handleImageClick(e, htmlImg));
-        }
-      });
-    }
+    // 为所有图片添加点击事件，但标记图片来源以区分处理，排除文章卡片封面图片和文章列表右侧图片
+    const allImages = document.querySelectorAll(
+      "img:not(.tk-image-viewer__canvas img):not(.tk-post-item-card__cover-img img):not(.tk-post-item__right.flx-align-center img):not(.VPNav img):not([alt='logo']):not(.VPImage.image-src):not(.irregular):not(.sw-interactive):not(.about-avatar):not(.nav-card__item__img):not(.skeleton-image):not(.no-preview.loaded):not(a img):not(.VPPage img)"
+    );
+    allImages.forEach(img => {
+      const htmlImg = img as HTMLImageElement;
+      // 确保只添加一次点击事件
+      if (!htmlImg.dataset.imageViewerInitialized) {
+        htmlImg.dataset.imageViewerInitialized = "true";
+        htmlImg.style.cursor = "pointer";
+
+        // 标记图片是否在vp-doc内
+        const isVpDocImage = htmlImg.closest(".vp-doc") !== null;
+        htmlImg.dataset.isVpDocImage = String(isVpDocImage);
+
+        // 为所有图片添加点击事件
+        htmlImg.addEventListener("click", (e: MouseEvent) => this.handleImageClick(e, htmlImg));
+      }
+    });
   }
 
+  // 监听DOM变化，为新添加的图片设置监听
   private observeDOMChanges() {
     const observer = new MutationObserver(() => {
       this.setupImageListeners();
@@ -65,72 +79,111 @@ class ImageViewer {
     });
   }
 
+  // 处理图片点击事件
   private handleImageClick(event: MouseEvent, img: HTMLImageElement) {
+    // 阻止事件冒泡
     event.stopPropagation();
 
-    this.collectImages();
+    // 保存当前图片类型
+    this.isVpDocImage = img.dataset.isVpDocImage === "true";
+
+    // 收集与当前图片同类的所有图片
+    this.collectImages(this.isVpDocImage);
+
+    // 找到当前点击的图片索引
     this.currentIndex = this.imgList.findIndex(src => src === img.src);
 
+    // 创建查看器
     this.createViewer(img.src);
   }
 
-  // 只收集内容区域中的图片
-  private collectImages() {
+  // 收集指定类型的图片
+  private collectImages(isVpDocImage: boolean) {
     this.imgList = [];
-    const vpDocElement = document.querySelector(".vp-doc");
-    if (vpDocElement) {
-      const images = vpDocElement.querySelectorAll("img:not(.tk-image-viewer__canvas img)");
-      images.forEach(img => {
+
+    if (isVpDocImage) {
+      const vpDocElement = document.querySelector(".vp-doc");
+      if (vpDocElement) {
+        const images = vpDocElement.querySelectorAll(
+          "img:not(.tk-image-viewer__canvas img):not(.tk-post-item-card__cover-img img):not(.tk-post-item__right.flx-align-center img):not(.VPNav img):not([alt='logo']):not(.VPImage.image-src):not(.irregular):not(.sw-interactive):not(.about-avatar):not(.nav-card__item__img):not(.skeleton-image):not(.no-preview.loaded):not(a img):not(.VPPage img)"
+        );
+        images.forEach(img => {
+          this.imgList.push((img as HTMLImageElement).src);
+        });
+      }
+    } else {
+      const nonVpDocImages = document.querySelectorAll(
+        "img:not(.tk-image-viewer__canvas img):not(.vp-doc img):not(.tk-post-item-card__cover-img img):not(.tk-post-item__right.flx-align-center img):not(.VPNav img):not([alt='logo']):not(.VPImage.image-src):not(.irregular):not(.sw-interactive):not(.about-avatar):not(.nav-card__item__img):not(.skeleton-image):not(.no-preview.loaded):not(a img):not(.VPPage img)"
+      );
+      nonVpDocImages.forEach(img => {
         this.imgList.push((img as HTMLImageElement).src);
       });
     }
   }
 
+  // 获取当前收集的图片数量
+  private getCurrentImageCount() {
+    return this.imgList.length;
+  }
+
+  // 创建图片查看器
   private createViewer(src: string) {
     this.removeViewer();
 
+    // 创建查看器容器
     this.viewerWrapper = document.createElement("div");
     this.viewerWrapper.className = "tk-image-viewer__wrapper";
 
+    // 创建图片容器
     this.canvas = document.createElement("div");
     this.canvas.className = "tk-image-viewer__canvas";
 
+    // 创建查看器中的图片
     const viewerImg = document.createElement("img");
     viewerImg.src = src;
     viewerImg.style.transform = "none";
     this.currentImg = viewerImg;
 
+    // 创建关闭按钮
     this.closeBtn = document.createElement("button");
     this.closeBtn.className = "tk-image-viewer__close";
     this.closeBtn.innerHTML = '<i class="tk-icon">❌</i>';
 
+    // 创建操作按钮容器
     const actionsContainer = document.createElement("div");
     actionsContainer.className = "tk-image-viewer__actions";
 
+    // 创建旋转按钮
     this.rotateBtn = document.createElement("button");
     this.rotateBtn.className = "tk-image-viewer__btn";
     this.rotateBtn.innerHTML = '<i class="tk-icon">🔄</i>';
 
+    // 创建上一张按钮
     this.prevBtn = document.createElement("button");
     this.prevBtn.className = "tk-image-viewer__btn";
     this.prevBtn.innerHTML = '<i class="tk-icon">⬅️</i>';
 
+    // 创建缩小按钮
     this.zoomOutBtn = document.createElement("button");
     this.zoomOutBtn.className = "tk-image-viewer__btn";
     this.zoomOutBtn.innerHTML = '<i class="tk-icon">➖</i>';
 
+    // 创建全屏按钮
     this.fullScreenBtn = document.createElement("button");
     this.fullScreenBtn.className = "tk-image-viewer__btn";
     this.fullScreenBtn.innerHTML = '<i class="tk-icon">🔳</i>';
 
+    // 创建原始大小按钮
     this.originalSizeBtn = document.createElement("button");
     this.originalSizeBtn.className = "tk-image-viewer__btn";
     this.originalSizeBtn.innerHTML = '<i class="tk-icon">🔍</i>';
 
+    // 创建放大按钮
     this.zoomInBtn = document.createElement("button");
     this.zoomInBtn.className = "tk-image-viewer__btn";
     this.zoomInBtn.innerHTML = '<i class="tk-icon">➕</i>';
 
+    // 创建下一张按钮
     this.nextBtn = document.createElement("button");
     this.nextBtn.className = "tk-image-viewer__btn";
     this.nextBtn.innerHTML = '<i class="tk-icon">➡️</i>';
@@ -144,42 +197,62 @@ class ImageViewer {
     actionsContainer.appendChild(this.rotateBtn);
     actionsContainer.appendChild(this.originalSizeBtn);
 
-    const infoContainer = document.createElement("div");
-    infoContainer.className = "tk-image-viewer__info";
-    infoContainer.textContent = `${this.currentIndex + 1} / ${this.imgList.length}`;
-    (this.viewerWrapper as any).infoContainer = infoContainer;
-
     this.canvas.appendChild(viewerImg);
     this.viewerWrapper.appendChild(this.canvas);
     this.viewerWrapper.appendChild(this.closeBtn);
     this.viewerWrapper.appendChild(actionsContainer);
-    this.viewerWrapper.appendChild(infoContainer);
 
+    // 仅在vp-doc内的图片才显示计数信息
+    if (this.isVpDocImage) {
+      const infoContainer = document.createElement("div");
+      infoContainer.className = "tk-image-viewer__info";
+      infoContainer.textContent = `${this.currentIndex + 1} / ${this.getCurrentImageCount()}`;
+      (this.viewerWrapper as any).infoContainer = infoContainer;
+      this.viewerWrapper.appendChild(infoContainer);
+    } else {
+      if (this.prevBtn) {
+        (this.prevBtn as HTMLButtonElement).disabled = true;
+        this.prevBtn.classList.add("tk-image-viewer__btn--disabled");
+      }
+      if (this.nextBtn) {
+        (this.nextBtn as HTMLButtonElement).disabled = true;
+        this.nextBtn.classList.add("tk-image-viewer__btn--disabled");
+      }
+    }
+
+    // 添加到页面
     document.body.appendChild(this.viewerWrapper);
 
+    // 添加事件监听
     this.addViewerEventListeners(viewerImg);
   }
 
+  // 添加查看器事件监听
   private addViewerEventListeners(img: HTMLImageElement) {
     if (!this.viewerWrapper || !this.canvas || !this.closeBtn) return;
 
+    // 重置状态变量
     this.scale = 1;
     this.rotation = 0;
     this.isFullScreen = false;
 
+    // 配置参数
     const scaleStep = 0.1;
     const maxScale = 3;
     const minScale = 0.5;
     const rotateStep = 90;
 
+    // 更新图片变换 - 包含拖拽移动
     const updateTransform = () => {
       img.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale}) rotate(${this.rotation}deg)`;
     };
 
+    // 点击图片区域不关闭，允许其他交互
     img.addEventListener("click", (e: MouseEvent) => {
       e.stopPropagation();
     });
 
+    // 拖拽开始
     const handleDragStart = (e: MouseEvent) => {
       e.stopPropagation();
       this.isDragging = true;
@@ -188,6 +261,7 @@ class ImageViewer {
       document.body.style.userSelect = "none";
     };
 
+    // 拖拽移动
     const handleDragMove = (e: MouseEvent) => {
       if (!this.isDragging) return;
       this.translateX = e.clientX - this.dragStartX;
@@ -195,17 +269,21 @@ class ImageViewer {
       updateTransform();
     };
 
+    // 拖拽结束
     const handleDragEnd = () => {
       this.isDragging = false;
       document.body.style.userSelect = "";
     };
 
+    // 添加拖拽事件监听
     img.addEventListener("mousedown", handleDragStart);
     document.addEventListener("mousemove", handleDragMove);
     document.addEventListener("mouseup", handleDragEnd);
     document.addEventListener("mouseleave", handleDragEnd);
 
+    // 移动设备触摸事件支持
     const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
       const touch = e.touches[0];
       e.stopPropagation();
       this.isDragging = true;
@@ -217,6 +295,7 @@ class ImageViewer {
     const handleTouchMove = (e: TouchEvent) => {
       if (!this.isDragging || e.touches.length !== 1) return;
       const touch = e.touches[0];
+      e.preventDefault();
       this.translateX = touch.clientX - this.dragStartX;
       this.translateY = touch.clientY - this.dragStartY;
       updateTransform();
@@ -227,20 +306,24 @@ class ImageViewer {
       document.body.style.userSelect = "";
     };
 
+    // 添加触摸事件监听
     img.addEventListener("touchstart", handleTouchStart, { passive: false });
     document.addEventListener("touchmove", handleTouchMove, { passive: false });
     document.addEventListener("touchend", handleTouchEnd);
     document.addEventListener("touchcancel", handleTouchEnd);
 
+    // 点击查看器背景关闭
     this.viewerWrapper.addEventListener("click", () => {
       this.removeViewer();
     });
 
+    // 点击关闭按钮关闭
     this.closeBtn.addEventListener("click", (e: MouseEvent) => {
       e.stopPropagation();
       this.removeViewer();
     });
 
+    // 旋转按钮事件
     if (this.rotateBtn) {
       const rotateBtnRef = this.rotateBtn;
       this.rotateBtn.addEventListener("click", (e: MouseEvent) => {
@@ -254,9 +337,10 @@ class ImageViewer {
       });
     }
 
+    // 上一张按钮事件
     this.prevBtn!.addEventListener("click", (e: MouseEvent) => {
       e.stopPropagation();
-      if (this.imgList.length > 1) {
+      if (this.isVpDocImage && this.imgList.length > 1) {
         this.currentIndex = (this.currentIndex - 1 + this.imgList.length) % this.imgList.length;
         this.switchImage(this.imgList[this.currentIndex]);
         this.prevBtn!.classList.add("tk-image-viewer__btn--active");
@@ -266,9 +350,10 @@ class ImageViewer {
       }
     });
 
+    // 下一张按钮事件
     this.nextBtn!.addEventListener("click", (e: MouseEvent) => {
       e.stopPropagation();
-      if (this.imgList.length > 1) {
+      if (this.isVpDocImage && this.imgList.length > 1) {
         this.currentIndex = (this.currentIndex + 1) % this.imgList.length;
         this.switchImage(this.imgList[this.currentIndex]);
         this.nextBtn!.classList.add("tk-image-viewer__btn--active");
@@ -278,6 +363,7 @@ class ImageViewer {
       }
     });
 
+    // 全屏按钮事件
     if (this.fullScreenBtn) {
       const fullScreenBtnRef = this.fullScreenBtn;
       this.fullScreenBtn.addEventListener("click", (e: MouseEvent) => {
@@ -299,6 +385,7 @@ class ImageViewer {
       });
     }
 
+    // 原始大小按钮事件
     if (this.originalSizeBtn) {
       const originalSizeBtnRef = this.originalSizeBtn;
       this.originalSizeBtn.addEventListener("click", (e: MouseEvent) => {
@@ -315,6 +402,7 @@ class ImageViewer {
       });
     }
 
+    // 放大按钮事件
     if (this.zoomInBtn) {
       const zoomInBtnRef = this.zoomInBtn;
       this.zoomInBtn.addEventListener("click", (e: MouseEvent) => {
@@ -330,6 +418,7 @@ class ImageViewer {
       });
     }
 
+    // 缩小按钮事件
     if (this.zoomOutBtn) {
       const zoomOutBtnRef = this.zoomOutBtn;
       this.zoomOutBtn.addEventListener("click", (e: MouseEvent) => {
@@ -345,6 +434,7 @@ class ImageViewer {
       });
     }
 
+    // 键盘快捷键处理
     const handleKeydown = (e: KeyboardEvent) => {
       e.preventDefault();
 
@@ -371,13 +461,13 @@ class ImageViewer {
           updateTransform();
           break;
         case "ArrowLeft":
-          if (this.imgList.length > 1) {
+          if (this.isVpDocImage && this.imgList.length > 1) {
             this.currentIndex = (this.currentIndex - 1 + this.imgList.length) % this.imgList.length;
             this.switchImage(this.imgList[this.currentIndex]);
           }
           break;
         case "ArrowRight":
-          if (this.imgList.length > 1) {
+          if (this.isVpDocImage && this.imgList.length > 1) {
             this.currentIndex = (this.currentIndex + 1) % this.imgList.length;
             this.switchImage(this.imgList[this.currentIndex]);
           }
@@ -411,6 +501,7 @@ class ImageViewer {
 
     document.addEventListener("keydown", handleKeydown);
 
+    // 鼠标滚轮缩放
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (e.deltaY < 0 && this.scale < maxScale) {
@@ -424,6 +515,7 @@ class ImageViewer {
 
     this.viewerWrapper.addEventListener("wheel", handleWheel, { passive: false });
 
+    // 保存事件处理器引用，以便后续移除
     (this.viewerWrapper as any).keydownHandler = handleKeydown;
     (this.viewerWrapper as any).wheelHandler = handleWheel;
     (this.viewerWrapper as any).dragStartHandler = handleDragStart;
@@ -434,9 +526,11 @@ class ImageViewer {
     (this.viewerWrapper as any).touchEndHandler = handleTouchEnd;
   }
 
+  // 切换图片
   private switchImage(newSrc: string) {
     if (!this.currentImg || !this.viewerWrapper) return;
 
+    // 淡入淡出效果
     this.currentImg.style.opacity = "0";
 
     setTimeout(() => {
@@ -453,9 +547,11 @@ class ImageViewer {
         }
       }
 
-      const infoContainer = (this.viewerWrapper as any).infoContainer;
-      if (infoContainer) {
-        infoContainer.textContent = `${this.currentIndex + 1} / ${this.imgList.length}`;
+      if (this.isVpDocImage) {
+        const infoContainer = (this.viewerWrapper as any).infoContainer;
+        if (infoContainer) {
+          infoContainer.textContent = `${this.currentIndex + 1} / ${this.getCurrentImageCount()}`;
+        }
       }
     }, 200);
   }
@@ -487,6 +583,7 @@ class ImageViewer {
         document.removeEventListener("mouseup", dragEndHandler);
         document.removeEventListener("mouseleave", dragEndHandler);
       }
+
       if (touchStartHandler && this.currentImg) {
         this.currentImg.removeEventListener("touchstart", touchStartHandler);
       }
@@ -497,6 +594,7 @@ class ImageViewer {
         document.removeEventListener("touchend", touchEndHandler);
         document.removeEventListener("touchcancel", touchEndHandler);
       }
+
       document.body.style.userSelect = "";
 
       this.viewerWrapper.classList.add("tk-image-viewer__wrapper--fade-out");
@@ -505,6 +603,7 @@ class ImageViewer {
         if (this.viewerWrapper && this.viewerWrapper.parentNode) {
           this.viewerWrapper.parentNode.removeChild(this.viewerWrapper);
         }
+
         this.viewerWrapper = null;
         this.canvas = null;
         this.closeBtn = null;
@@ -521,6 +620,7 @@ class ImageViewer {
         this.scale = 1;
         this.rotation = 0;
         this.isFullScreen = false;
+        this.isVpDocImage = false;
         this.isDragging = false;
         this.translateX = 0;
         this.translateY = 0;
@@ -531,6 +631,7 @@ class ImageViewer {
 
 // 所有样式已移至dd-image.scss
 
+// 导出初始化函数
 export function initImageViewer() {
   if (typeof window !== "undefined") {
     new ImageViewer();
