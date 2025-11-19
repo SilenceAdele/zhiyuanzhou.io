@@ -134,10 +134,10 @@ const teekConfig = defineTeekConfig({
 
 // 布蒜子统计分析
   docAnalysis: {
-    createTime: "2025-02-26",
+    createTime: "2025-11-05",
     statistics: {
       provider: "busuanzi",
-      url: "https://bszi.eryajf.net/jsonp?callback=BusuanziCallback",
+      url: "https://api.osyb.cn/busuanzi?jsonpCallback=BusuanziCallback",
       tryRequest: true,
       tryCount: 5,
       tryIterationTime: 2000,
