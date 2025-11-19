@@ -42,7 +42,7 @@ jobs:
         run: pnpm docs:build
 
       - name: Copy verification file to dist
-        run: cp docs/66da716f833d9bb19720c4a91bd5efb6.txt docs/.vitepress/dist/
+        run: cp docs/validateFile/66da716f833d9bb19720c4a91bd5efb6.txt docs/.vitepress/dist/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
