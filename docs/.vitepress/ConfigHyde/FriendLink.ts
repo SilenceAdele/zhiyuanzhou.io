@@ -18,13 +18,13 @@ export const FriendLink = {
       link: "https://vp.teek.top/",
     },  
     {
-      avatar: "https://testingcf.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar2.png",
+      avatar: "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/friendlink-1.png",
       name: "Teeker",
       desc: "朝圣的使徒，正在走向编程的至高殿堂！",
       link: "http://notes.teek.top/",
     },     
     {
-      avatar: "https://s1.imagehub.cc/images/2025/10/27/44e660bbc910ea16fc76589f646986da.webp",
+      avatar: "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/friendlink-2.webp",
       name: "One Blog",
       desc: "明心静性，爱自己",
       link: "https://onedayxyy.cn/",
