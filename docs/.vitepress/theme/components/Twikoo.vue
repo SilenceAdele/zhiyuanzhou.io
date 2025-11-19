@@ -13,7 +13,7 @@ const initTwikoo = async () => {
   if (typeof window !== 'undefined') {
     const twikoo = await import('twikoo')
     twikoo.init({
-      envId: 'https://stirring-quokka-ee7a61.netlify.app/.netlify/functions/twikoo', // 换成你自己配置的域名
+      envId: 'https://twikoo.zhiyuanzhou.online/.netlify/functions/twikoo', // 换成你自己配置的域名
       el: '#twikoo'
     })
   }
