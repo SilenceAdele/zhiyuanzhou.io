@@ -677,7 +677,7 @@ function startServiceMonitoring() {
 function getFallbackImages(): string[] {
   // 从 Wallaper.ts 导入的备用图片
   const fallbackImages = [
-    "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/frontPageBgi-1.jpgp",
+    "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/frontPageBgi-1.jpg",
   ]
   return fallbackImages
 }

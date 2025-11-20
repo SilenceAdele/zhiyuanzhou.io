@@ -7,7 +7,7 @@ export const FriendLink = {
 
   autoPage: true, // 是否自动翻页
   pageSpeed: 4000, // 翻页间隔时间，单位：毫秒。autoPage 为 true 时生效
-  titleClick: (router) => router.go("/websites"), // 查看更多友链
+  // titleClick: (router) => router.go("/websites"), // 查看更多友链
 
   // 友情链接数据列表
   list: [
