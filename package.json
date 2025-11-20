@@ -23,6 +23,6 @@
     "vitepress-markdown-timeline": "^1.2.2",
     "vitepress-plugin-auto-frontmatter": "^1.0.13",
     "vitepress-plugin-group-icons": "^1.6.5",
-    "vitepress-theme-teek": "^1.5.1"
+    "vitepress-theme-teek": "^1.5.2"
   }
 }
