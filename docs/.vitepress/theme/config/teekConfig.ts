@@ -83,83 +83,20 @@ const teekBlogCommonConfig: TeekConfig = {
   friendLink: FriendLink, // 友链配置
   social: SocialDate, //社交信息配置
    
-  
-
-
-  
-  // docAnalysis: {
-  //   createTime: "2025-03-23",
-  //   statistics: {
-  //     // provider: "busuanzi",
-  //     provider: "vercount",
-  //     // url: "//bsz.eryajf.net/jsonp?callback=Busuanzicallback"
-  //   },
-  // },
-  // friendLink: {
-  //   list: [
-  //     {
-  //       name: "Teeker",
-  //       desc: "朝圣的使徒，正在走向编程的至高殿堂！",
-  //       avatar: "https://testingcf.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar2.png",
-  //       link: "http://notes.teek.top/",
-  //     },
-  //     {
-  //       name: "vuepress-theme-vdoing",
-  //       desc: "🚀一款简洁高效的VuePress 知识管理&博客 主题",
-  //       avatar: "https://doc.xugaoyi.com/img/logo.png",
-  //       link: "https://doc.xugaoyi.com/",
-  //     },
-  //     {
-  //       name: "One",
-  //       desc: "明心静性，爱自己",
-  //       avatar: "https://onedayxyy.cn/img/xyy-touxiang.png",
-  //       link: "https://onedayxyy.cn/",
-  //     },
-  //     {
-  //       name: "Hyde Blog",
-  //       desc: "人心中的成见是一座大山",
-  //       avatar: "https://teek.seasir.top/avatar/avatar.webp",
-  //       link: "https://teek.seasir.top/",
-  //     },
-  //     {
-  //       name: "二丫讲梵",
-  //       desc: "💻学习📝记录🔗分享",
-  //       avatar: "https://wiki.eryajf.net/img/logo.png",
-  //       link: " https://wiki.eryajf.net/",
-  //     },
-  //     {
-  //       name: "粥里有勺糖",
-  //       desc: "简约风的 VitePress 博客主题",
-  //       avatar: "https://theme.sugarat.top/logo.png",
-  //       link: "https://theme.sugarat.top/",
-  //     },
-  //     {
-  //       name: "VitePress 快速上手中文教程",
-  //       desc: "如果你也想搭建它，那跟我一起做吧",
-  //       avatar: "https://avatars.githubusercontent.com/u/90893790?v=4",
-  //       link: "https://vitepress.yiov.top/",
-  //     },
-  //     {
-  //       name: "友人A",
-  //       desc: "おとといは兎をみたの，昨日は鹿，今日はあなた",
-  //       avatar: "http://niubin.site/logo.jpg",
-  //       link: "http://niubin.site/",
-  //     },
-  //   ],
-  //   autoScroll: true,
-  // },
-  // social: [
-  //   {
-  //     icon: "mdi:github",
-  //     name: "GitHub",
-  //     link: "https://github.com/kele-bingtang",
-  //   },
-  //   {
-  //     icon: "simple-icons:gitee",
-  //     name: "Gitee",
-  //     link: "https://gitee.com/kele-bingtang",
-  //   },
-  // ],
+  // 站点信息卡片配置
+  docAnalysis: {
+    enabled: true,
+    createTime: "2025-11-05",
+    wordCount: true,
+    readingTime: true,
+    statistics: {
+      provider: "busuanzi", //是否开启首页的访问量和排名统计，仅当 provider 存在生效
+      // siteView: true, //是否开启文章页的浏览量统计，仅当 provider 存在生效
+      // pageView: true, //如果请求不蒜子接口失败，是否重试，类型 boolean
+      // tryRequest: false, //重试次数，仅当 tryRequest 为 true 时有效
+      // tryCount: 2000, //重试间隔时间，单位毫秒，仅当 tryRequest 为 true 时有效目录链接
+    },
+  },
 };
 
 // 博客默认配置
