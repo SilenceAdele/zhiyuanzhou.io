@@ -30,7 +30,7 @@ export const FriendLink = {
       link: "https://onedayxyy.cn/",
     },
     {
-      avatar: "https://img.onedayxyy.cn/images/Teek/Teekwebsite/hyde.webp",
+      avatar: "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/friendlink-3.webp",
       name: "Hyde Blog",
       desc: "人心中的成见是一座大山",
       link: "https://teek.seasir.top/",
