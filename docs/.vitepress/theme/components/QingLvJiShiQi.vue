@@ -24,7 +24,7 @@
       <div class="avatar-container">
         <!-- 左侧头像 -->
         <div class="avatar-wrapper left-avatar">
-          <img src="https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/defalutPostBgi.jpg" alt="情侣头像1" class="avatar-image">
+          <img src="https://image.zhiyuanzhou.online/defalutPostBgi.jpg" alt="情侣头像1" class="avatar-image">
           <div class="gender-indicator male">
             <span class="icon">♂</span>
           </div>
@@ -39,7 +39,7 @@
         
         <!-- 右侧头像 -->
         <div class="avatar-wrapper right-avatar">
-          <img src="https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/defalutPostBgi.jpg" alt="情侣头像2" class="avatar-image">
+          <img src="https://image.zhiyuanzhou.online/defalutPostBgi.jpg" alt="情侣头像2" class="avatar-image">
           <div class="gender-indicator female">
             <span class="icon">♀</span>
           </div>
