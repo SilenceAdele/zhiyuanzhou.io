@@ -67,7 +67,7 @@ const teekConfig = defineTeekConfig({
     shape: "circle-rotate", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转
     name: "zhiyuan.zhou", // 侧边栏个人昵称
     slogan: "Cloud Observability Engineer", // 侧边栏个人座右铭
-    circleBgImg: "https://image.zhiyuanzhou.online/bloggerInfoBgi.webp", // 侧边栏个人头像圆形背景图
+    circleBgImg: "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/bloggerInfoBgi.webp", // 侧边栏个人头像圆形背景图
     circleBgMask: false, // 头像圆形背景图是否显示遮罩层
     color: "#fff",
 
