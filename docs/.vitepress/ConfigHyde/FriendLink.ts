@@ -12,6 +12,12 @@ export const FriendLink = {
   // 友情链接数据列表
   list: [
     {
+      avatar: "/img/nav/upyun.png",
+      name: "又拍云",
+      desc: "本站由又拍云提供云存储服务",
+      link: "https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral",
+    }, 
+    {
       avatar: "https://image.zhiyuanzhou.online/friendlink-0.png",
       name: "vitepress-theme-teek",
       desc: "Teek官网",
