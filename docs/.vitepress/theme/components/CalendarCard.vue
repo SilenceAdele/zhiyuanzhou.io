@@ -61,49 +61,56 @@
 
 <script setup>
 import { TkPageCard } from "vitepress-theme-teek";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
 // 星期几中文映射
 const weekDays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-// 当前日期
+// 当前日期（响应式）
 const today = ref(new Date());
 
-// 生成当前月份的日历数据
+// 同步今天（跨天更新触发）
+const syncToday = () => {
+  const now = new Date();
+  // today.value = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  today.value = new Date(now); // 复制当前完整时间（包含分秒）
+};
+
+// 生成当前月份日历
 const calendarWeeks = computed(() => {
+  console.log(
+    "今天的日期: today (Y-M-D H:m:s) =",
+    today.value.getFullYear(),
+    today.value.getMonth() + 1,   // 月份从 0 开始，所以 +1
+    today.value.getDate(),
+    today.value.getHours(),
+    today.value.getMinutes(),
+    today.value.getSeconds()
+  );
   const year = today.value.getFullYear();
   const month = today.value.getMonth();
 
-  // 当月第一天
   const firstDay = new Date(year, month, 1);
-  // 当月最后一天
   const lastDay = new Date(year, month + 1, 0);
 
-  // 日历需要显示的第一天（可能是上月的日期）
-  const startDay = new Date(firstDay);
-  startDay.setDate(firstDay.getDate() - firstDay.getDay());
+  const start = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate() - firstDay.getDay());
+  const end = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate() + (6 - lastDay.getDay()));
 
-  // 日历需要显示的最后一天（可能是下月的日期）
-  const endDay = new Date(lastDay);
-  if (endDay.getDay() < 6) {
-    endDay.setDate(lastDay.getDate() + (6 - endDay.getDay()));
+  const dates = [];
+  for (let d = new Date(start); d <= end; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+    dates.push(new Date(d));
   }
 
-  // 生成日历数据
   const weeks = [];
-  let currentDay = new Date(startDay);
-
-  while (currentDay <= endDay) {
-    const week = [];
-    for (let i = 0; i < 7; i++) {
-      const date = currentDay.getDate();
-      const isToday = currentDay.toDateString() === today.value.toDateString();
-      const isOtherMonth = currentDay.getMonth() !== month;
-
-      week.push({ date, isToday, isOtherMonth });
-
-      currentDay.setDate(currentDay.getDate() + 1);
-    }
+  for (let i = 0; i < dates.length; i += 7) {
+    const week = dates.slice(i, i + 7).map(day => ({
+      date: day.getDate(),
+      isToday: 
+        day.getFullYear() === today.value.getFullYear() &&
+        day.getMonth() === today.value.getMonth() &&
+        day.getDate() === today.value.getDate(),
+      isOtherMonth: day.getMonth() !== month
+    }));
     weeks.push(week);
   }
 
@@ -125,7 +132,7 @@ const weekNumber = computed(() => {
   return Math.ceil((pastDaysOfYear + firstDay.getDay() + 1) / 7);
 });
 
-// 农历转换相关
+// --------- 农历数据与辅助数组 ----------
 const lunarInfo = [
   0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0,
   0x09ad0, 0x055d2, 0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540,
@@ -149,143 +156,140 @@ const lunarInfo = [
 ];
 
 const gan = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
-const zhi = [
-  "子",
-  "丑",
-  "寅",
-  "卯",
-  "辰",
-  "巳",
-  "午",
-  "未",
-  "申",
-  "酉",
-  "戌",
-  "亥",
-];
-const animals = [
-  "鼠",
-  "牛",
-  "虎",
-  "兔",
-  "龙",
-  "蛇",
-  "马",
-  "羊",
-  "猴",
-  "鸡",
-  "狗",
-  "猪",
-];
-const lunarMonths = [
-  "正月",
-  "二月",
-  "三月",
-  "四月",
-  "五月",
-  "六月",
-  "七月",
-  "八月",
-  "九月",
-  "十月",
-  "十一月",
-  "十二月",
-];
-const lunarDays = [
-  "初一",
-  "初二",
-  "初三",
-  "初四",
-  "初五",
-  "初六",
-  "初七",
-  "初八",
-  "初九",
-  "初十",
-  "十一",
-  "十二",
-  "十三",
-  "十四",
-  "十五",
-  "十六",
-  "十七",
-  "十八",
-  "十九",
-  "二十",
-  "廿一",
-  "廿二",
-  "廿三",
-  "廿四",
-  "廿五",
-  "廿六",
-  "廿七",
-  "廿八",
-  "廿九",
-  "三十",
-];
+const zhi = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+const animals = ["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
+const lunarMonths = ["正月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+const lunarDays = ["初一","初二","初三","初四","初五","初六","初七","初八","初九","初十","十一","十二","十三","十四","十五","十六","十七","十八","十九","二十","廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九","三十"];
 
-// 转换为农历
-const getLunarDate = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+// ---------- 农历辅助函数（基于 lunarInfo） ----------
+function getLunarYearDays(y) {
+  // 一年农历天数（含闰月）
+  let sum = 348; // 29 * 12
+  const info = lunarInfo[y - 1900];
+  for (let i = 0x8000; i > 0x8; i >>= 1) {
+    sum += (info & i) ? 1 : 0;
+  }
+  return sum + getLeapMonthDays(y);
+}
 
-  let springStart = new Date(2000, 1, 4); // 2000年春节是2月4日
-  if (year > 2000) {
-    // 简单计算春节日期，实际应用中可能需要更精确的算法
-    springStart = new Date(year, 1, 4 + Math.floor((year - 2000) * 0.2422));
+function getLeapMonth(y) {
+  return lunarInfo[y - 1900] & 0xf; // 0 表示无闰月
+}
+
+function getLeapMonthDays(y) {
+  return getLeapMonth(y) ? ((lunarInfo[y - 1900] & 0x10000) ? 30 : 29) : 0;
+}
+
+function getLunarMonthDays(y, m) {
+  // m 从 1 开始
+  return (lunarInfo[y - 1900] & (0x10000 >> m)) ? 30 : 29;
+}
+
+// ---------- 稳妥的 getLunarDate 实现（本地时间、正确闰月处理） ----------
+function getLunarDate(date) {
+  // 基准日：1900-01-31（农历 1900-正月初一）
+  const baseDate = new Date(1900, 0, 31);
+  const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  let offset = Math.floor((target - baseDate) / 86400000); // 0-based 天数差
+
+  // 计算农历年
+  let lunarYear = 1900;
+  while (offset >= getLunarYearDays(lunarYear)) {
+    offset -= getLunarYearDays(lunarYear);
+    lunarYear++;
   }
 
-  let lunarYear = year;
+  // 该年闰月信息
+  const leap = getLeapMonth(lunarYear);
   let isLeap = false;
-  let lunarMonthIdx = 0;
-  let lunarDayIdx = 0;
+  let month = 1;
+  let daysInMonth = 0;
 
-  // 简化的农历计算，实际应用可能需要更复杂的算法
-  const offset = Math.floor((date - new Date(year, 0, 0)) / 86400000);
-  let days = 0;
-  let i = 0;
-
-  for (; i < 12; i++) {
-    const monthDays = (lunarInfo[year - 1900] >> (12 - i)) & 0x1 ? 30 : 29;
-    if (days + monthDays >= offset) {
-      lunarDayIdx = offset - days - 1;
-      break;
+  // 计算月份和日（offset 为该农历年内剩余天数，0 -> 初一）
+  while (true) {
+    if (isLeap) {
+      daysInMonth = getLeapMonthDays(lunarYear);
+    } else {
+      daysInMonth = getLunarMonthDays(lunarYear, month);
     }
-    days += monthDays;
-  }
-  lunarMonthIdx = i;
 
-  // 计算农历年的干支和生肖
-  const ganIndex = (year - 3) % 10;
-  const zhiIndex = (year - 3) % 12;
+    if (offset < daysInMonth) break;
+
+    offset -= daysInMonth;
+
+    // 闰月切换逻辑：
+    // 如果当前不是闰月且当前月是闰月标记的那个 month，则下一轮进入闰月
+    if (!isLeap && leap > 0 && month === leap) {
+      isLeap = true;
+      // 注意：进入闰月时 month 不自增（表示闰在该月之后）
+    } else {
+      if (isLeap) {
+        // 刚走完闰月，退出闰月并推进到下一个常规月
+        isLeap = false;
+        month++;
+      } else {
+        month++;
+      }
+    }
+  }
+
+  const lunarDay = offset + 1; // 1-based
+  const lunarMonthStr = (isLeap ? "闰" : "") + lunarMonths[month - 1];
+  const lunarDayStr = lunarDays[lunarDay - 1];
+
+  const ganIndex = (lunarYear - 4) % 10;
+  const zhiIndex = (lunarYear - 4) % 12;
   const lunarYearStr = `${gan[ganIndex]}${zhi[zhiIndex]}${animals[zhiIndex]}年`;
 
   return {
     lunarYear: lunarYearStr,
-    lunarMonth: lunarMonths[lunarMonthIdx],
-    lunarDay: lunarDays[lunarDayIdx],
+    lunarMonth: lunarMonthStr,
+    lunarDay: lunarDayStr
   };
-};
+}
 
-// 响应式农历数据
+// 响应式农历数据（computed）
 const lunarDate = computed(() => getLunarDate(today.value));
 const lunarYear = computed(() => lunarDate.value.lunarYear);
 const lunarMonth = computed(() => lunarDate.value.lunarMonth);
 const lunarDay = computed(() => lunarDate.value.lunarDay);
 
-// 每天更新一次日历
+// 在挂载时立即同步 today 并开始跨天检查
 onMounted(() => {
-  // 检查是否需要更新（跨天）
-  const checkUpdate = () => {
-    const now = new Date();
-    if (now.toDateString() !== today.value.toDateString()) {
-      today.value = now;
+  // 立即同步一次
+  syncToday();
+
+  // 每分钟同步一次
+  const intervalId = setInterval(syncToday, 60 * 1000);
+
+  // 可见性切换处理（具名）
+  const handleVisibilityChange = () => {
+    if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+      syncToday();
     }
   };
 
-  // 每分钟检查一次
-  setInterval(checkUpdate, 60000);
+  // 窗口 focus 处理（具名）
+  const handleWindowFocus = () => syncToday();
+
+  // 只在客户端添加监听（SSR guard）
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+  }
+  if (typeof window !== 'undefined') {
+    window.addEventListener('focus', handleWindowFocus);
+  }
+
+  // 清理：确保移除与 interval 清空
+  onUnmounted(() => {
+    clearInterval(intervalId);
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('focus', handleWindowFocus);
+    }
+  });
 });
 </script>
 
@@ -304,11 +308,11 @@ body {
 }
 
 :root {
-  --other-month-bg: #fa0000;
+  --other-month-color: #0080ff;
 }
 
 .dark {
-  --other-month-bg: #0080ff;
+  --other-month-color: #0080ff;
 }
 
 .tk-page-card {
@@ -435,7 +439,7 @@ body {
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--calendar-main-a-clolr);
+  color: var(--calendar-main-a-color);
 }
 
 #calendar-main a.now {
@@ -444,6 +448,6 @@ body {
 }
 
 #calendar-main a.other-month {
-  color: var(--other-month-clolr);
+  color: var(--other-month-color);
 }
 </style>
