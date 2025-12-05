@@ -6,18 +6,10 @@
       </div>
       <div class="item-content">
         <div id="calendar-area-left">
-          <div id="calendar-week">
-            第{{ weekNumber }}周&nbsp;{{ weekDays[today.getDay()] }}
-          </div>
+          <div id="calendar-week">第{{ weekNumber }}周&nbsp;{{ weekDays[today.getDay()] }}</div>
           <div id="calendar-date">{{ today.getDate() }}</div>
-          <div id="calendar-solar">
-            {{ today.getFullYear() }}年{{ today.getMonth() + 1 }}月第{{
-              dayOfYear
-            }}天
-          </div>
-          <div id="calendar-lunar">
-            {{ lunarYear }}&nbsp;{{ lunarMonth }}&nbsp;{{ lunarDay }}
-          </div>
+          <div id="calendar-solar">{{ today.getFullYear() }}年{{ today.getMonth() + 1 }}月第{{ dayOfYear }}天</div>
+          <div id="calendar-lunar">{{ lunarYear }}&nbsp;{{ lunarMonth }}&nbsp;{{ lunarDay }}</div>
         </div>
         <div id="calendar-area-right">
           <div id="calendar-main">
@@ -33,20 +25,9 @@
             </div>
 
             <!-- 日期行 -->
-            <div
-              v-for="(week, weekIndex) in calendarWeeks"
-              :key="weekIndex"
-              :class="`calendar-r${weekIndex + 1}`"
-            >
-              <div
-                v-for="(day, dayIndex) in week"
-                :key="dayIndex"
-                :class="`calendar-d${dayIndex}`"
-              >
-                <a
-                  :class="{ now: day.isToday, 'other-month': day.isOtherMonth }"
-                  v-if="day.date"
-                >
+            <div v-for="(week, weekIndex) in calendarWeeks" :key="weekIndex" :class="`calendar-r${weekIndex + 1}`">
+              <div v-for="(day, dayIndex) in week" :key="dayIndex" :class="`calendar-d${dayIndex}`">
+                <a :class="{ 'otherMonth': day.isOtherMonth }" v-if="day.date">
                   {{ day.date }}
                 </a>
                 <a v-else></a>
@@ -61,59 +42,48 @@
 
 <script setup>
 import { TkPageCard } from "vitepress-theme-teek";
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { computed } from "vue"; // 仅保留 computed，删除 ref
 
 // 星期几中文映射
 const weekDays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-// 当前日期（响应式）
-const today = ref(new Date());
+// ✅ 核心改动：删除 ref, 改用 computed 实时获取最新时间
+const today = computed(() => new Date());
 
-// 同步今天（跨天更新触发 ）
-const syncToday = () => {
-  const now = new Date();
-  // today.value = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  today.value = new Date(now); // 复制当前完整时间（包含分秒）
-};
-
-// 生成当前月份日历
+// 生成当前月份的日历数据
 const calendarWeeks = computed(() => {
-  console.log(
-    "今天的日期: today (Y-M-D H:m:s) =",
-    today.value.getFullYear(),
-    today.value.getMonth() + 1,   // 月份从 0 开始，所以 +1
-    today.value.getDate(),
-    today.value.getHours(),
-    today.value.getMinutes(),
-    today.value.getSeconds()
-  );
   const year = today.value.getFullYear();
   const month = today.value.getMonth();
-
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-
-  const start = new Date(firstDay.getFullYear(), firstDay.getMonth(), firstDay.getDate() - firstDay.getDay());
-  const end = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate() + (6 - lastDay.getDay()));
-
-  const dates = [];
-  for (let d = new Date(start); d <= end; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
-    dates.push(new Date(d));
+  const startDay = new Date(firstDay);
+  startDay.setDate(firstDay.getDate() - firstDay.getDay());
+  const endDay = new Date(lastDay);
+  if (endDay.getDay() < 6) {
+    endDay.setDate(lastDay.getDate() + (6 - endDay.getDay()));
   }
 
   const weeks = [];
-  for (let i = 0; i < dates.length; i += 7) {
-    const week = dates.slice(i, i + 7).map(day => ({
-      date: day.getDate(),
-      isToday: 
-        day.getFullYear() === today.value.getFullYear() &&
-        day.getMonth() === today.value.getMonth() &&
-        day.getDate() === today.value.getDate(),
-      isOtherMonth: day.getMonth() !== month
-    }));
+  let currentDay = new Date(startDay);
+  
+  // ✅ 实时生成“今日0点”, 彻底忽略时分秒
+  const todayZero = new Date();
+  todayZero.setHours(0, 0, 0, 0);
+
+  while (currentDay <= endDay) {
+    const week = [];
+    for (let i = 0; i < 7; i++) {
+      const date = currentDay.getDate();
+      // ✅ 生成当前日期的0点, 对比时间戳(最可靠)
+      const currentZero = new Date(currentDay);
+      currentZero.setHours(0, 0, 0, 0);
+      const isToday = currentZero.getTime() === todayZero.getTime();      
+      const isOtherMonth = currentDay.getMonth() !== month;
+      week.push({ date, isToday, isOtherMonth });
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
     weeks.push(week);
   }
-
   return weeks;
 });
 
@@ -187,7 +157,7 @@ function getLunarMonthDays(y, m) {
 
 // ---------- 稳妥的 getLunarDate 实现（本地时间、正确闰月处理） ----------
 function getLunarDate(date) {
-  // 基准日：1900-01-31（农历 1900-正月初一）
+  // 基准日: 1900-01-31(农历 1900-正月初一)
   const baseDate = new Date(1900, 0, 31);
   const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   let offset = Math.floor((target - baseDate) / 86400000); // 0-based 天数差
@@ -231,6 +201,7 @@ function getLunarDate(date) {
         month++;
       }
     }
+
   }
 
   const lunarDay = offset + 1; // 1-based
@@ -248,77 +219,14 @@ function getLunarDate(date) {
   };
 }
 
-// 响应式农历数据（computed）
+// 响应式农历数据
 const lunarDate = computed(() => getLunarDate(today.value));
 const lunarYear = computed(() => lunarDate.value.lunarYear);
 const lunarMonth = computed(() => lunarDate.value.lunarMonth);
 const lunarDay = computed(() => lunarDate.value.lunarDay);
-
-// 在挂载时立即同步 today 并开始跨天检查
-onMounted(() => {
-  // 立即同步一次
-  syncToday();
-
-  // 每分钟同步一次
-  const intervalId = setInterval(syncToday, 60 * 1000);
-
-  // 可见性切换处理（具名）
-  const handleVisibilityChange = () => {
-    if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
-      syncToday();
-    }
-  };
-
-  // 窗口 focus 处理（具名）
-  const handleWindowFocus = () => syncToday();
-
-  // 只在客户端添加监听（SSR guard）
-  if (typeof document !== 'undefined') {
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-  }
-  if (typeof window !== 'undefined') {
-    window.addEventListener('focus', handleWindowFocus);
-  }
-
-  // 清理：确保移除与 interval 清空
-  onUnmounted(() => {
-    clearInterval(intervalId);
-    if (typeof document !== 'undefined') {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }
-    if (typeof window !== 'undefined') {
-      window.removeEventListener('focus', handleWindowFocus);
-    }
-  });
-});
 </script>
 
 <style scoped>
-/* 基础样式重置 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Microsoft YaHei", sans-serif;
-}
-
-body {
-  background-color: #f5f7fa;
-  padding: 20px;
-}
-
-:root {
-  --other-month-color: #0080ff;
-}
-
-.dark {
-  --other-month-color: #0080ff;
-}
-
-.tk-page-card {
-  margin-top: 10px;
-}
-
 .card-widget {
   max-height: calc(100vh - 100px);
   position: relative;
@@ -439,15 +347,14 @@ body {
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--calendar-main-a-color);
 }
 
-#calendar-main a.now {
-  background: var(--vp-c-brand-1);
+#calendar-main a.today {
+  background: #409EFF;
   color: #fff;
 }
 
-#calendar-main a.other-month {
-  color: var(--other-month-color);
+#calendar-main a.otherMonth {
+  color: #c0c0c0;
 }
 </style>

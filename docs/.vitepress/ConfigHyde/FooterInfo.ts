@@ -11,7 +11,7 @@ export const FooterInfo = {
     
     <a target="_blank" href="https://www.algolia.com/" title="本站搜索服务使用 Algolia"><img alt="Algolia" src="https://img.shields.io/badge/Search-Algolia-3095FA?logo=Algolia"></a>
     
-    <a target="_blank" href="https://github.com/" title="本站部署服务使用 GitHub" rel="noopener noreferrer"><img alt="github" src="https://img.shields.io/static/v1?label=Server&message=GitHub&color=181717&logo=github&logoColor=white"></a>
+    <a target="_blank" href="https://cloud.tencent.com/" title="本站部署服务由 腾讯云 提供" rel="noopener noreferrer"><img alt="tencent cloud" src="https://img.shields.io/static/v1?label=Server&message=TencentCloud&color=27A9E3&logo=tencentcloud&logoColor=white"></a>    
     
     <a target="_blank" href="https://www.cloudflare.com/" title="本站 CDN 服务由 Cloudflare 提供" rel="noopener noreferrer"><img alt="Cloudflare CDN" src="https://img.shields.io/badge/CDN-Cloudflare-FF6A00?logo=cloudflare"></a>
 
