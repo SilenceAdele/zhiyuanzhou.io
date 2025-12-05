@@ -12,7 +12,7 @@ export const WALLPAPER_SERVICE_CONFIG = {
 
 // 备用图片列表（当本地服务不可用时使用）
 const fallbackImages = [
-  "https://cdn.jsdelivr.net/gh/SilenceAdele/zhiyuanzhou.io@master/docs/public/img/imgaeBed/frontPageBgi-1.jpg",
+  "https://img.zhiyuanzhou.online/img/frontPageBgi-1.jpg",
 ];
 // 动态获取图片列表的函数
 async function fetchDynamicWallpapers(): Promise<string[]> {
