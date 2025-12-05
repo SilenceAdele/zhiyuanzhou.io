@@ -69,7 +69,7 @@ const weekDays = ["周日", "周一", "周二", "周三", "周四", "周五", "�
 // 当前日期（响应式）
 const today = ref(new Date());
 
-// 同步今天（跨天更新触发）
+// 同步今天（跨天更新触发 ）
 const syncToday = () => {
   const now = new Date();
   // today.value = new Date(now.getFullYear(), now.getMonth(), now.getDate());
