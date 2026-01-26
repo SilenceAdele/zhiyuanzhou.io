@@ -40,11 +40,11 @@ interface NoticeContent {
 
 // 公告内容
 const noticeContent: NoticeContent = {
-  title: '📢 重要公告',
-  subtitle: 'zhiyuan.zhou\'s Blog 正式上线啦🎉',
-  content: '个人专属博客是很多软件工程师的执念，很开心我的个人博客终于和大家见面啦！',
+  title: '📢 人生格言',
+  //subtitle: 'zhiyuan.zhou\'s Life motto',
+  content: '是非审之于己，毁誉听之于人，得失安之于数。',
   operationButtonName: '查看详情',
-  operationButtonPath: 'https://blog.zhiyuanzhou.online/',
+  operationButtonPath: 'https://ylsy.hnu.edu.cn/info/1011/9014.htm',
 };
 
 // 判断是否为外链
