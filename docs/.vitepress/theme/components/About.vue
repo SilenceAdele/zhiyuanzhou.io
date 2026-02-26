@@ -24,6 +24,7 @@
       <ul>
         <li><a href="https://github.com/prometheus/procfs/pull/719" target="_blank">procfs #719</a> ✅ Already merged</li>
         <li><a href="https://github.com/ncabatoff/process-exporter/pull/353" target="_blank">process-exporter #353</a> ⏳ Waiting for merge</li>
+        <li><a href="https://github.com/mrlhansen/idrac_exporter/issues/172" target="_blank">idrac_exporter #172</a> 💡 Reported issue & solution adopted upstream</li>
       </ul>
     </section>
 
