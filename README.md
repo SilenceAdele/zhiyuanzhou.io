@@ -1,28 +1,16 @@
-<h1 align="center">zhiyuanzhou.io</h1>
+# zhiyuanzhou.io
 
-<p align="center">
-  个人技术博客 — 记录云原生、可观测性、故障排查等领域的学习与实践。
-</p>
+我的个人技术博客，主要写云原生、可观测性和故障排查相关的内容。
 
-<p align="center">
-  <a href="https://blog.zhiyuanzhou.online"><strong>🌐 在线访问</strong></a>
-  &nbsp;|&nbsp;
-  <a href="https://github.com/SilenceAdele"><strong>🐙 GitHub</strong></a>
-</p>
+在线访问：[blog.zhiyuanzhou.online](https://blog.zhiyuanzhou.online)
 
----
+## 技术栈
 
-## ✨ 技术栈
+博客基于 [VitePress](https://vitepress.dev/) 搭建，使用了 [vitepress-theme-teek](https://github.com/Kele-Bingtang/vitepress-theme-teek) 主题。
 
-| 类别 | 技术 |
-|------|------|
-| 框架 | [VitePress](https://vitepress.dev/) |
-| 主题 | [vitepress-theme-teek](https://github.com/Kele-Bingtang/vitepress-theme-teek) |
-| 搜索 | Algolia |
-| 统计 | 不蒜子 |
-| 评论 | Twikoo |
+另外集成了 Algolia 搜索、不蒜子站点统计和 Twikoo 评论。
 
-## 📁 目录结构
+## 目录结构
 
 ```
 docs/
@@ -40,7 +28,7 @@ docs/
 └── 12.关于我/
 ```
 
-## 🚀 本地开发
+## 本地开发
 
 ```bash
 pnpm install          # 安装依赖
@@ -49,6 +37,6 @@ pnpm docs:build       # 构建静态站点
 pnpm docs:preview     # 预览构建产物
 ```
 
-## 📄 许可证
+## 许可
 
 文章内容采用 [CC BY-NC-SA 4.0](http://www.suncai.net/PubLicense/CCBY40.html) 许可协议。
