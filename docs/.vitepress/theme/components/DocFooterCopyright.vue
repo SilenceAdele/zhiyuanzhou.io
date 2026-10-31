@@ -63,9 +63,9 @@ import { useData, useRoute } from 'vitepress'
 // 统一配置区
 const config = {
   authorName: 'zhiyuan.zhou',
-  authorUrl: 'https://blog.zhiyuanzhou.online/',
+  authorUrl: 'https://blog.zhiyuanzhou.top/',
   siteName: 'zhiyuan.zhou\'s Blog',
-  siteUrl: 'https://blog.zhiyuanzhou.online',
+  siteUrl: 'https://blog.zhiyuanzhou.top',
   licenseName: 'CC BY-NC-SA 4.0',
   licenseUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh'
 }

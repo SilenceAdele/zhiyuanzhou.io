@@ -67,7 +67,7 @@ const teekConfig = defineTeekConfig({
     shape: "circle-rotate", // 头像风格：square 为方形头像，circle 为圆形头像，circle-rotate 可支持鼠标悬停旋转
     name: "zhiyuan.zhou", // 侧边栏个人昵称
     slogan: "Cloud Observability Engineer", // 侧边栏个人座右铭
-    circleBgImg: "https://img.zhiyuanzhou.online/img/bloggerInfoBgi.webp", // 侧边栏个人头像圆形背景图
+    circleBgImg: "https://img.zhiyuanzhou.top/blog-image-global/bloggerInfoBgi.webp", // 侧边栏个人头像圆形背景图
     circleBgMask: false, // 头像圆形背景图是否显示遮罩层
     color: "#fff",
 
@@ -150,7 +150,7 @@ const teekConfig = defineTeekConfig({
   // 风险链接提示页
   riskLink: {
     enabled: true, //是否启用风险链接提示功能
-    whitelist: ["https://github.com/SilenceAdele", "https://blog.zhiyuanzhou.online/", "https://vp.teek.top/", "http://notes.teek.top","https://onedayxyy.cn/", /https:\/\/github.com/, /https:\/\/giee.com/], // 白名单，匹配到的链接不提示风险
+    whitelist: ["https://github.com/SilenceAdele", "https://blog.zhiyuanzhou.top/", "https://vp.teek.top/", "http://notes.teek.top","https://onedayxyy.cn/", /https:\/\/github.com/, /https:\/\/giee.com/], // 白名单，匹配到的链接不提示风险
     blacklist: [], // 黑名单，匹配到的链接提示风险
   },
 
@@ -380,7 +380,7 @@ export default defineConfig({
     },
   },
   sitemap: {
-    hostname: "https://blog.zhiyuanzhou.online",
+    hostname: "https://blog.zhiyuanzhou.top",
     // transformItems: items => {
     //   const permalinkItemBak: typeof items = [];
     //   // 使用永久链接生成 sitemap
@@ -433,7 +433,7 @@ export default defineConfig({
       options: {
         appId: 'NW2LBSQ16W',
         apiKey: '95b149278d5ec08b5c67c7281690213a',
-        indexName: 'zhiyuanzhou_blog_online',
+        indexName: 'zhiyuanzhou_blog_top',
      }
     },
 

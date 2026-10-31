@@ -12,41 +12,41 @@ export const FriendLink = {
   // 友情链接数据列表
   list: [
     {
-      avatar: "https://img.zhiyuanzhou.online/img/upyun.png",
-      name: "又拍云",
-      desc: "本站由又拍云提供云存储服务",
-      link: "https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral",
-    }, 
-    {
-      avatar: "https://img.zhiyuanzhou.online/img/friendlink-0.png",
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-0.png",
       name: "vitepress-theme-teek",
       desc: "Teek官网",
       link: "https://vp.teek.top/",
     },  
     {
-      avatar: "https://img.zhiyuanzhou.online/img/friendlink-1.png",
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-1.png",
       name: "Teeker",
       desc: "朝圣的使徒，正在走向编程的至高殿堂！",
       link: "http://notes.teek.top/",
     },     
     {
-      avatar: "https://img.zhiyuanzhou.online/img/friendlink-2.webp",
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-2.webp",
       name: "One Blog",
       desc: "明心静性，爱自己",
       link: "https://onedayxyy.cn/",
     },
     {
-      avatar: "https://img.zhiyuanzhou.online/img/friendlink-3.webp",
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-3.webp",
       name: "Hyde Blog",
       desc: "人心中的成见是一座大山",
       link: "https://teek.seasir.top/",
     },
     {
-      avatar: "https://img.zhiyuanzhou.online/img/friendlink-4.svg",
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-4.svg",
       name: "W3C技术联盟",
       desc: "汇聚全球项目及技术",
       link: "https://w3c.cool/",
-    } 
+    },
+ {
+      avatar: "https://img.zhiyuanzhou.top/blog-image-global/friendlink-5.webp",
+      name: "十三",
+      desc: "热爱折腾，奔赴山海。",
+      link: "https://nw177.cn/",
+    }
   ],
   // autoScroll: true,
 };

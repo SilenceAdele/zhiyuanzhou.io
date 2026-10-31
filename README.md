@@ -2,7 +2,7 @@
 
 我的个人技术博客，主要写云原生、可观测性和故障排查相关的内容。
 
-在线访问：[blog.zhiyuanzhou.online](https://blog.zhiyuanzhou.online)
+在线访问：[blog.zhiyuanzhou.top](https://blog.zhiyuanzhou.top)
 
 ## 技术栈
 
