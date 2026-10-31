@@ -27,7 +27,7 @@
             <!-- 日期行 -->
             <div v-for="(week, weekIndex) in calendarWeeks" :key="weekIndex" :class="`calendar-r${weekIndex + 1}`">
               <div v-for="(day, dayIndex) in week" :key="dayIndex" :class="`calendar-d${dayIndex}`">
-                <a :class="{ 'otherMonth': day.isOtherMonth }" v-if="day.date">
+                <a :class="{ 'otherMonth': day.isOtherMonth, 'today': day.isToday }" v-if="day.date">
                   {{ day.date }}
                 </a>
                 <a v-else></a>
@@ -42,13 +42,42 @@
 
 <script setup>
 import { TkPageCard } from "vitepress-theme-teek";
-import { computed } from "vue"; // 仅保留 computed，删除 ref
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 // 星期几中文映射
 const weekDays = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-// ✅ 核心改动：删除 ref, 改用 computed 实时获取最新时间
-const today = computed(() => new Date());
+// 用 ref 充当时间源：computed 没有响应式依赖，只会算一次，跨天后不会重算
+const now = ref(new Date());
+const today = computed(() => now.value);
+
+let midnightTimer = null;
+
+// 刷新时间并重排到下一个零点，跨天后高亮自动跳到新日期
+const refreshToday = () => {
+  now.value = new Date();
+  clearTimeout(midnightTimer);
+  const nextMidnight = new Date();
+  nextMidnight.setDate(nextMidnight.getDate() + 1);
+  nextMidnight.setHours(0, 0, 1, 0);
+  midnightTimer = setTimeout(refreshToday, nextMidnight.getTime() - Date.now());
+};
+
+const onVisibilityChange = () => {
+  if (document.visibilityState === "visible") refreshToday();
+};
+
+onMounted(() => {
+  // 静态站 HTML 里写的是构建日期，挂载后先纠正一次
+  refreshToday();
+  // 休眠/后台标签页的定时器可能被推迟，回到前台时再校准
+  document.addEventListener("visibilitychange", onVisibilityChange);
+});
+
+onBeforeUnmount(() => {
+  clearTimeout(midnightTimer);
+  document.removeEventListener("visibilitychange", onVisibilityChange);
+});
 
 // 生成当前月份的日历数据
 const calendarWeeks = computed(() => {
