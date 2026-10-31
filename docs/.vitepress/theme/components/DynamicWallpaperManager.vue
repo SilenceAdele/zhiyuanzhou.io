@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, nextTick, watch } from 'vue'
 import { useRoute } from 'vitepress'
-import { fetchDynamicWallpapers, WALLPAPER_SERVICE_CONFIG } from '../../ConfigHyde/Wallaper'
+import { fetchDynamicWallpapers, WALLPAPER_SERVICE_CONFIG, hasWallpaperService } from '../../ConfigHyde/Wallaper'
 
 // 路由检测 - 只在首页启用动态壁纸
 const route = useRoute()
@@ -684,6 +684,13 @@ function getFallbackImages(): string[] {
 
 // 页面刷新时从API获取新壁纸
 async function fetchFreshWallpaperOnRefresh(): Promise<string | null> {
+  // 未配置壁纸服务，直接使用备用图片，避免无意义的请求和警告
+  if (!hasWallpaperService) {
+    currentImages = getFallbackImages()
+    isUsingFallback = true
+    return currentImages[Math.floor(Math.random() * currentImages.length)]
+  }
+
   try {
     console.log('🔄 页面刷新，从API获取新壁纸...')
     const images = await fetchDynamicWallpapers()
@@ -906,6 +913,9 @@ onMounted(async () => {
   
   // 等待一个切换间隔后开始异步检测和切换
   setTimeout(async () => {
+    // 未配置壁纸服务，跳过检测，保持使用备用图片
+    if (!hasWallpaperService) return
+
     console.log('🔍 开始检测图集服务状态并更新图库...')
 
     try {

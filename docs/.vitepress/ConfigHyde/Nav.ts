@@ -1,5 +1,4 @@
 // nav导航栏配置
-import { TeekIcon, VdoingIcon, SSLIcon, BlogIcon } from "./icon/NavIcon";
 
 export const Nav = [
     { text: "首页", link: "/" },

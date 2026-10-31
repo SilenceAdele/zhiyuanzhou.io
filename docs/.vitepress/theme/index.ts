@@ -3,10 +3,6 @@ import Teek from "vitepress-theme-teek";
 import TeekLayoutProvider from "./components/TeekLayoutProvider.vue";
 import { defineComponent, h } from "vue";
 import { useData } from "vitepress";
-// import notice from "./components/notice.vue";
-// import MNavLinks from "./components/MNavLinks.vue"; // 引入导航组件
-import confetti from "./components/Confetti.vue"; //导入五彩纸屑组件
-// import NavIcon from "./components/NavIcon.vue"; //导入导航栏图标
 
 
 // Teek 在线主题包引用（需安装 Teek 在线版本）
@@ -49,19 +45,12 @@ import "nprogress-v2/dist/index.css"; // 进度条样式
 import "vitepress-theme-teek/tk-plus/fade-up-animation.scss";// 首次加载的动画效果
 
 
-import SLink from "./components/SLink/index.vue"; //友链
-
-// 导入情侣相册组件
-import CoupleAlbum from './components/CoupleAlbum/CoupleAlbum.vue'
-import PhotoCard from './components/CoupleAlbum/PhotoCard.vue'
-
 // 引入复制事件（复制后弹窗提示）
 import { useCopyEvent } from "./composables/useCopyEvent.ts";
 
 
 import "./components/guangbiaoTX/guangbiaoTX.scss"; // ⬅️ 鼠标拖尾样式scss
 import { useGuangbiaoTX } from "./components/guangbiaoTX/useGuangbiaoTX"; // ⬅️ 导入鼠标拖尾星星动画ts
-// import "./style/sidebar-icon.scss";
 import { initImageViewer } from "./style/dd-image/dd-image.ts" // 引入图片查看器功能（替换原版
 
 
@@ -69,20 +58,6 @@ import { initImageViewer } from "./style/dd-image/dd-image.ts" // 引入图片�
 export default {
   extends: Teek,
   async enhanceApp({ app, router }) {
-    // 注册组件
-    // app.component("MNavLinks", MNavLinks); // 注册导航组件
-    app.component("confetti", confetti); // 注册五彩纸屑组件
-
-    app.component('CoupleAlbum', CoupleAlbum) // 注册情侣相册组件
-    app.component('PhotoCard', PhotoCard)
-    
-    // app.component("NavIcon", NavIcon); //导航栏图标
-
-    // 注册全局组件
-    app.component("friend-link", SLink);
-
-  
-
     // 非SSR环境下配置路由进度条
     // @ts-expect-error
     if (!import.meta.env.SSR) {
@@ -103,16 +78,6 @@ export default {
     initImageViewer();
 
     }
-      // 不蒜子环境下配置路由进度条
-    // if (inBrowser) {
-    //   NProgress.configure({ showSpinner: false });
-    //   router.onBeforeRouteChange = () => {
-    //     NProgress.start(); // 开始进度条
-    //   };
-    //   router.onAfterRouteChanged = () => {
-    //     NProgress.done(); // 停止进度条
-    //   };
-    // },  
     
   },
   Layout: defineComponent({

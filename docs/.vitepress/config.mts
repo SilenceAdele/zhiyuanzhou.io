@@ -4,7 +4,6 @@ import { version } from "vitepress-theme-teek/es/version";
 import { Wallpaper } from "./ConfigHyde/Wallaper"; // 导入Wallaper模块
 import { Cover } from "./ConfigHyde/Cover"; // 导入Wallaper模块
 
-import { CommentData } from "./ConfigHyde/Comment"; //导入评论配置
 import { Nav } from "./ConfigHyde/Nav"; // 导入Nav模块
 import { SocialLinks } from "./ConfigHyde/SocialLinks"; //导入社交链接配置
 
@@ -29,9 +28,9 @@ import { useTransformByRules, type TransformRule } from "./theme/composables/use
 
 
 const description = [
-  "欢迎来到 vitepress-theme-teek 使用文档",
-  "Teek 是一个基于 VitePress 构建的主题，是在默认主题的基础上进行拓展，支持 VitePress 的所有功能、配置",
-  "Teek 拥有三种典型的知识管理形态：结构化、碎片化、体系化，可以轻松构建一个结构化知识库，适用个人博客、文档站、知识库等场景",
+  "zhiyuan.zhou 的个人技术博客，主要记录云原生、可观测性与故障排查相关的实践和思考",
+  "内容涵盖 Kubernetes、Prometheus TSDB、云存储、中间件、操作系统、计算机网络与 Golang",
+  "也会分享折腾日记、生活随笔与影音记录，欢迎交流学习",
 ].toString();
 const CoverImgList = Cover; // 获取封面列表
 // const CoverBgList = Wallpaper; // 获取壁纸列表

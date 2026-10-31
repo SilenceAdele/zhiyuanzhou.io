@@ -14,8 +14,14 @@ export const WALLPAPER_SERVICE_CONFIG = {
 const fallbackImages = [
   "https://img.zhiyuanzhou.top/blog-image-global/frontPageBgi-1.jpg",
 ];
+
+// 未配置服务地址时直接使用备用图片，避免请求当前页面导致 404
+export const hasWallpaperService = Boolean(WALLPAPER_SERVICE_CONFIG.fullUrl);
+
 // 动态获取图片列表的函数
 async function fetchDynamicWallpapers(): Promise<string[]> {
+  if (!hasWallpaperService) return fallbackImages;
+
   try {
     // 使用统一配置的图片服务API
     const response = await fetch(WALLPAPER_SERVICE_CONFIG.fullUrl, {

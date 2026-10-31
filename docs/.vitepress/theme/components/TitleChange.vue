@@ -40,3 +40,5 @@ onBeforeUnmount(() => {
     clearTimeout(titleTimer.value)
 })
 </script>
+
+<template></template>

@@ -1,4 +1,0 @@
-// 首页壁纸
-export const Cover = [
-  "https://img.zhiyuanzhou.top/blog-image-global/frontPageBgi-1.jpg",
-];

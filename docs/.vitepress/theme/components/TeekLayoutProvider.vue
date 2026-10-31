@@ -12,8 +12,6 @@ import ContributeChart from "./ContributeChart.vue";
 import NotFound from "./404.vue";
 import BannerImgArrow from "./BannerImgArrow.vue"; //导入横幅图片箭头组件
 
-import NoticeContent from "./NoticeContent.vue"; //导入公告组件
-//import GlobalGreet from "./GlobalGreet.vue";  //导入全局问候组件
 import TitleChange from "./TitleChange.vue" //导入网页标题变化
 import ScrollProgressBar from "./ScrollProgressBar.vue" //导入顶部滚动条组件
 
@@ -22,18 +20,10 @@ import DocFooterCopyright from "./DocFooterCopyright.vue"; //导入文档页脚�
 
 import BackTop from "./BackTop.vue"; //导入回到顶部组件
 import Clock from "./Clock.vue"; // 时钟组件
-// import OhMyLive2D from "./OhMyLive2D.vue"; //导入看板娘组件
-
-
-// @ts-ignore
-// import InformationCard from "./InformationCard.vue";  //导入信息卡片和舔狗日记组件
 
 import NoticeCard from "./NoticeCard.vue"; //导入公告卡片组件
 import WelcomeCard from "./WelcomeCard.vue"; //导入欢迎卡片组件
 
-// 暂时先关闭导入公众号展示模块
-// import WechatAccountCard from "./WechatAccountCard.vue";
-// import RouteSwitchingLoading from "./RouteSwitchingLoading.vue"; // 过渡动画组件
 
 
 
@@ -96,19 +86,10 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
 <template>
   <Teek.Layout>
     <template #layout-top>
-      <!-- 全局问候组件 -->
-      <!-- <GlobalGreet /> -->
-      <!-- 看板娘组件 -->
-      <!-- <OhMyLive2D /> -->
       <!-- 顶部滚动条组件 -->
       <ScrollProgressBar />
       <!--网页标题切换组件  -->
       <TitleChange />
-      <!-- 返回顶部组件 -->
-      <!--<BackToTop /> -->
-      
-      <!-- 路由切换遮罩动画组件 -->
-      <RouteSwitchingLoading />
     </template>
 
 
@@ -128,11 +109,6 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
 
     <template #not-found>
       <NotFound />
-    </template>
-
-    <template #teek-notice-content>
-      <!-- 公告组件 -->
-      <NoticeContent />
     </template>
 
     <template #teek-home-banner-feature-after>
@@ -162,11 +138,6 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
 
 
 
-    <!-- 自定义公告卡片 -->
-    <template #teek-home-card-doc-analysis-after>
-      <WechatAccountCard />
-    </template>
-
     <!-- 回到顶部组件插槽 -->
     <template #teek-back-top>
       <BackTop />
@@ -195,13 +166,6 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
     <template #doc-footer-before>
       <DocFooterCopyright />
     </template>
-
-
-    <!-- <template #teek-home-banner-after>
-      <InformationCard />
-    </template>     -->
-
-
         
   </Teek.Layout>
 </template>
