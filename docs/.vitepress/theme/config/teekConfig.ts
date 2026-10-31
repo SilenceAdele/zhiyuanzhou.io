@@ -7,6 +7,7 @@ import { HitokotoDate } from "../../ConfigHyde/HitokotoDate"; // 导入HitokotoD
 import { Wallpaper } from "../../ConfigHyde/Wallaper"; // 导入Wallaper模块
 import { Cover } from "../../ConfigHyde/Cover"; // 导入Wallaper模块
 import { SocialDate } from "../../ConfigHyde/SocialDate"; // 导入SocialDate社交信息模块
+import { statisticsConfig } from "./stats"; // 自建站点统计
 
 
 // 文档配置
@@ -90,11 +91,9 @@ const teekBlogCommonConfig: TeekConfig = {
     wordCount: true,
     readingTime: true,
     statistics: {
-      provider: "busuanzi", //是否开启首页的访问量和排名统计，仅当 provider 存在生效
-      // siteView: true, //是否开启文章页的浏览量统计，仅当 provider 存在生效
-      // pageView: true, //如果请求不蒜子接口失败，是否重试，类型 boolean
-      // tryRequest: false, //重试次数，仅当 tryRequest 为 true 时有效
-      // tryCount: 2000, //重试间隔时间，单位毫秒，仅当 tryRequest 为 true 时有效目录链接
+      // provider 仅用于让卡片展示访问量，真正的请求走 requestFn
+      provider: "busuanzi",
+      ...statisticsConfig,
     },
   },
 };

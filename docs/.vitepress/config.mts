@@ -6,6 +6,7 @@ import { Cover } from "./ConfigHyde/Cover"; // 导入Wallaper模块
 
 import { Nav } from "./ConfigHyde/Nav"; // 导入Nav模块
 import { SocialLinks } from "./ConfigHyde/SocialLinks"; //导入社交链接配置
+import { statisticsConfig } from "./theme/config/stats"; // 自建站点统计
 
 
 
@@ -131,19 +132,17 @@ const teekConfig = defineTeekConfig({
   // },
 
 
-// 布蒜子统计分析
+  // 站点统计分析（自建：edgeone-s3-site-statistics）
+  // 注意：卡片实际读的是 theme/config/teekConfig.ts 里 provide 的配置，这里保持一致以防切换风格
   docAnalysis: {
     createTime: "2025-11-05",
     statistics: {
       provider: "busuanzi",
-      url: "https://bszi.eryajf.net/jsonp?callback=BusuanziCallback",
-      tryRequest: true,
-      tryCount: 5,
-      tryIterationTime: 2000,
+      ...statisticsConfig,
     },
     wordCount: true,
     readingTime: true,
-  },  
+  },
 
 
   // 风险链接提示页

@@ -47,6 +47,7 @@ import "vitepress-theme-teek/tk-plus/fade-up-animation.scss";// 首次加载的�
 
 // 引入复制事件（复制后弹窗提示）
 import { useCopyEvent } from "./composables/useCopyEvent.ts";
+import { trackVisit } from "./composables/useVisitTracker.ts";
 
 
 import "./components/guangbiaoTX/guangbiaoTX.scss"; // ⬅️ 鼠标拖尾样式scss
@@ -67,7 +68,12 @@ export default {
         setTimeout(() => {
           NProgress.done();
         }, 100);
+        // 🔽 自建站点统计：每次路由切换记一次访问
+        trackVisit();
       };
+
+      // 首屏不会触发 onAfterRouteChange，单独上报一次
+      trackVisit();
 
     // 🔽 鼠标拖尾星星动画
     if (typeof window !== "undefined") {

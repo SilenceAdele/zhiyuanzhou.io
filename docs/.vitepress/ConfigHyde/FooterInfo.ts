@@ -15,9 +15,9 @@ export const FooterInfo = {
     
     <a target="_blank" href="https://www.cloudflare.com/" title="本站 CDN 服务由 Cloudflare 提供" rel="noopener noreferrer"><img alt="Cloudflare CDN" src="https://img.shields.io/badge/CDN-Cloudflare-FF6A00?logo=cloudflare"></a>
 
-    <a target="_blank" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" title="本站云存储服务由又拍云提供" rel="noopener noreferrer"><img alt="Upyun" src="https://img.shields.io/badge/CloudStorage-Upyun-blue?logo=upyun&logoColor=whitee"></a>
+    <a target="_blank" href="https://data.cstcloud.cn/" title="本站云存储服务由 CSTCloud 提供" rel="noopener noreferrer"><img alt="CSTCloud" src="https://img.shields.io/badge/CloudStorage-CSTCloud-blue?logo=aws&logoColor=white"></a>
 
-    <a target="_blank" href="https://www.busuanzi.cc/" title="本站统计服务由 Busuanzi 提供"><img alt="busuanzi" src="https://img.shields.io/badge/Count-Busuanzi-9b59b6?logo=busuanzi&logoColor=white"></a>`,
+    <a target="_blank" href="https://stats.zhiyuanzhou.top/" title="本站统计服务由 Edgeone-s3-site-statistics 提供" rel="noopener noreferrer"><img alt="Edgeone-s3-site-statistics" src="https://img.shields.io/badge/Count-Edgeone--s3--site--statistics-9b59b6"></a>`,
   ],
   theme: {
     name: `Theme By Teek@${version}-2025.10.19`,
