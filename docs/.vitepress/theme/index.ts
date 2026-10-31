@@ -55,6 +55,17 @@ import { useGuangbiaoTX } from "./components/guangbiaoTX/useGuangbiaoTX"; // ⬅
 import { initImageViewer } from "./style/dd-image/dd-image.ts" // 引入图片查看器功能（替换原版
 
 
+// 友链头像在 SSR 期间就开始下载，等 hydration 挂上 onLoad 时往往已加载完，
+// 事件不会再触发，.loaded 缺失会让 CSS 一直把图片压在 opacity: 0（只剩骨架屏）
+function markLoadedAvatars() {
+  requestAnimationFrame(() => {
+    document
+      .querySelectorAll<HTMLImageElement>(".tk-friend-link .skeleton-image > img")
+      .forEach((img) => {
+        if (img.complete) img.classList.add("loaded");
+      });
+  });
+}
 
 export default {
   extends: Teek,
@@ -70,10 +81,12 @@ export default {
         }, 100);
         // 🔽 自建站点统计：每次路由切换记一次访问
         trackVisit();
+        markLoadedAvatars();
       };
 
       // 首屏不会触发 onAfterRouteChange，单独上报一次
       trackVisit();
+      markLoadedAvatars();
 
     // 🔽 鼠标拖尾星星动画
     if (typeof window !== "undefined") {
