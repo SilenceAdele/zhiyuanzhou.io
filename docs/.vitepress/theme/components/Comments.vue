@@ -496,6 +496,9 @@ function openConfirm() {
   openDialog("send");
 }
 
+// 评论要先写进对象存储，正常也要好几秒；超过这个时间就当作请求已经废了
+const SUBMIT_TIMEOUT_MS = 30_000;
+
 async function submit() {
   if (submitting.value) return;
 
@@ -515,9 +518,14 @@ async function submit() {
   error.value = "";
 
   const target = replyTarget.value;
+  // 服务端要等评论落库（自建 S3 网关单程就要几秒），没有兜底的话请求一旦挂掉，
+  // 按钮会永远停在"发送中"。
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), SUBMIT_TIMEOUT_MS);
   try {
     const res = await fetch(`${commentsEndpoint}/api/comment`, {
       method: "POST",
+      signal: controller.signal,
       // text/plain 让请求保持 CORS-simple，不触发预检
       headers: { "content-type": "text/plain;charset=UTF-8" },
       body: JSON.stringify({
@@ -559,9 +567,13 @@ async function submit() {
 
     // 邮箱不留存：共用电脑上不该把别人的地址留在浏览器里
     localStorage.setItem("zc_name", form.name);
-  } catch {
-    dialogError.value = "网络异常，请稍后重试";
+  } catch (e) {
+    dialogError.value =
+      (e as Error)?.name === "AbortError"
+        ? "发送超时，评论可能已经提交，请稍后刷新确认"
+        : "网络异常，请稍后重试";
   } finally {
+    clearTimeout(timer);
     submitting.value = false;
   }
 }
