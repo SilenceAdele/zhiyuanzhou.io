@@ -7,7 +7,7 @@ export const FooterInfo = {
 
     <a target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="本站内容采用 CC BY-NC-SA 4.0 国际许可协议进行许可"><img alt="Copyright" src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?logo=coursera&amp;logoColor=fff"></a>
     
-    <a target="_blank" href="https://twikoo.js.org/" title="本站评论系统使用 Twikoo" ><img alt="Twikoo" src="https://img.shields.io/badge/Comments-Twikoo-0072F9"></a>
+    <a target="_blank" href="https://comments.zhiyuanzhou.top/" title="本站评论系统由 Edgeone-s3-comments 提供" rel="noopener noreferrer"><img alt="Edgeone-s3-comments" src="https://img.shields.io/badge/Comments-Edgeone--s3--comments-9b59b6"></a>
     
     <a target="_blank" href="https://www.algolia.com/" title="本站搜索服务使用 Algolia"><img alt="Algolia" src="https://img.shields.io/badge/Search-Algolia-3095FA?logo=Algolia"></a>
     

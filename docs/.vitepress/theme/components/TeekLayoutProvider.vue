@@ -32,7 +32,7 @@ import ScheduleCard from "./ScheduleCard.vue"; //节日倒计时卡片
 // import CalendarCard from "./CalendarCard.vue";
 
 
-import Twikoo from './Twikoo.vue' //评论组件
+import Comments from './Comments.vue' //评论组件
 
 const ns = "layout-provider";
 const { frontmatter } = useData();
@@ -118,7 +118,7 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
 
 
     <!-- <template #doc-after>
-      <Twikoo />
+      <Comments />
     </template> -->
 
     
@@ -159,7 +159,7 @@ const handleConfigSwitch = (config: TeekConfig, style: string) => {
     <!-- <template #teek-doc-after-appreciation-after>
        -->
     <template #teek-comment>  
-      <Twikoo />
+      <Comments />
     </template>    
 
     <!-- 文章末尾版权说明 -->

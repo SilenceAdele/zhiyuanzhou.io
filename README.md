@@ -8,7 +8,7 @@
 
 博客基于 [VitePress](https://vitepress.dev/) 搭建，使用了 [vitepress-theme-teek](https://github.com/Kele-Bingtang/vitepress-theme-teek) 主题。
 
-另外集成了 Algolia 搜索、不蒜子站点统计和 Twikoo 评论。
+另外集成了 Algolia 搜索，以及自建的站点统计和评论服务（数据都存在自己的 S3 兼容存储里）。
 
 ## 目录结构
 
