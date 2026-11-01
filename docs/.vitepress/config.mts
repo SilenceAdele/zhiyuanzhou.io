@@ -217,23 +217,6 @@ const teekConfig = defineTeekConfig({
     // },
   },
 
-
-  // 超过半年的文章自动提示文章内容可能已过时
-  articleTopTip: (frontmatter) => {
-    const tip: Record<string, string> = {
-      type: "warning",
-      text: "文章发布较早，内容可能过时，阅读注意甄别。",
-    };
-
-    // 大于半年，添加提示
-    const longTime = 6 * 30 * 24 * 60 * 60 * 1000;
-    if (
-      frontmatter.date &&
-      Date.now() - new Date(frontmatter.date).getTime() > longTime
-    )
-      return tip;
-  },
-
   // // 评论配置
   // comment: {
   //   provider: "twikoo",
