@@ -45,25 +45,10 @@
   @include text-clip-common;
 }
 
-.VPDoc h1 {
-//   @include text-gradient;
-//     // 换行
-//   display: table-row-group;
-  //background: -webkit-linear-gradient(10deg, #bd34fe 5%, #e43498 15%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: black;
-}
-
-// .VPDoc h2 {
-//   @include text-gradient;
-// }
-// 让md里的h2标题为紫色
+// 文档标题用主题文字色：深色模式下黑字会看不见
+.VPDoc h1,
 .VPDoc h2 {
-  //background: -webkit-linear-gradient(10deg, #bd34fe 5%, #e43498 15%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: black;
+  color: var(--vp-c-text-1);
 }
 
 // 草莓熊色

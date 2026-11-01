@@ -14,7 +14,7 @@ import "vitepress-theme-teek/theme-chalk/tk-sidebar.css"; // 引入侧边栏样�
 import "vitepress-theme-teek/theme-chalk/tk-nav.css"; // 引入导航栏样式
 
 import "vitepress-theme-teek/theme-chalk/tk-aside.css"; // 文章目录样式
-import "vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css"; // 文档以及标题样式
+// import "vitepress-theme-teek/theme-chalk/tk-doc-h1-gradient.css"; // 文档以及标题样式：H1 已是纯色，渐变色会导致标题左侧残留紫色文字重影
 import "vitepress-theme-teek/theme-chalk/tk-table.css"; // 表格样式
 import "vitepress-theme-teek/theme-chalk/tk-mark.css"; // 文章 mark 标签样式
 import "vitepress-theme-teek/theme-chalk/tk-blockquote.css"; //引用样式
