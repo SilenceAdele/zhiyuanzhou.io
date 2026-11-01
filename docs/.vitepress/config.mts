@@ -429,9 +429,9 @@ export default defineConfig({
     search: {
       provider: 'algolia',
       options: {
-        appId: 'NW2LBSQ16W',
-        apiKey: '95b149278d5ec08b5c67c7281690213a',
-        indexName: 'zhiyuanzhou_blog_top',
+        appId: '7ZT4HWKK0F',
+        apiKey: 'b66bb6bc6ffd9bf0ca2dd27484ad56f0',
+        indexName: 'zzy_blog_top',
      }
     },
 
