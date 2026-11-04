@@ -12,6 +12,10 @@ import { statisticsConfig } from "./stats"; // 自建站点统计
 import { clientNow } from "../composables/useClientNow";
 
 declare const __LAST_COMMIT_EPOCH__: number;
+declare const __BUILD_TIME__: number;
+
+// 水合阶段沿用构建时刻，保证首帧文案与 SSR 一致；挂载后换成真实时间
+const relativeEnd = () => clientNow.value || __BUILD_TIME__;
 
 
 // 文档配置
@@ -99,14 +103,14 @@ const teekBlogCommonConfig: TeekConfig = {
       {
         key: "runtime",
         value: (originValue, currentValue) => {
-          const days = formatDiffDateToDay(originValue, clientNow.value || undefined);
+          const days = formatDiffDateToDay(originValue, relativeEnd());
           return days === 0 ? (currentValue as string) : `${days} 天`;
         },
       },
       {
         key: "lastActiveTime",
         value: (originValue) =>
-          formatDiffDate(__LAST_COMMIT_EPOCH__ || originValue, clientNow.value || undefined),
+          formatDiffDate(__LAST_COMMIT_EPOCH__ || originValue, relativeEnd()),
       },
     ],
     statistics: {

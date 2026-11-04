@@ -46,6 +46,7 @@ const lastCommitEpoch = (() => {
     return 0;
   }
 })();
+const buildEpoch = Date.now();
 
  
 const teekConfig = defineTeekConfig({
@@ -440,6 +441,7 @@ export default defineConfig({
   vite: {
     define: {
       __LAST_COMMIT_EPOCH__: JSON.stringify(lastCommitEpoch),
+      __BUILD_TIME__: JSON.stringify(buildEpoch),
     },
 
     server: {

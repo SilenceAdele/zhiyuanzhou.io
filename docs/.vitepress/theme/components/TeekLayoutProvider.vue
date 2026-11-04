@@ -2,11 +2,12 @@
 import type { TeekConfig } from "vitepress-theme-teek";
 import Teek, { teekConfigContext, clockIcon } from "vitepress-theme-teek";
 import { useData } from "vitepress";
-import { watch, nextTick, ref, provide } from "vue";
+import { watch, nextTick, ref, provide, onMounted } from "vue";
 // import { teekDocConfig } from "../config/teekConfig";
 import { teekBlogCardConfig } from "../config/teekConfig";
 import { useRibbon } from "../composables/useRibbon";
 import { useRuntime } from "../composables/useRuntime";
+import { startClientNow } from "../composables/useClientNow";
 import ConfigSwitch from "./ConfigSwitch.vue";
 import ContributeChart from "./ContributeChart.vue";
 import NotFound from "./404.vue";
@@ -46,6 +47,9 @@ const { frontmatter } = useData();
 const currentStyle = ref("blog-card");
 const teekConfig = ref(teekBlogCardConfig);
 provide(teekConfigContext, teekConfig);
+
+// 水合只比对文本不纠正，挂载后再推一次真实时间
+onMounted(startClientNow);
 
 // 彩带背景
 const { start: startRibbon, stop: stopRibbon } = useRibbon({ immediate: false, clickReRender: true });
