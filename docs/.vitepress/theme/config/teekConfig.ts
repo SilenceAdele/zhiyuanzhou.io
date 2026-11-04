@@ -11,6 +11,8 @@ import { SocialDate } from "../../ConfigHyde/SocialDate"; // 导入SocialDate社
 import { statisticsConfig } from "./stats"; // 自建站点统计
 import { clientNow } from "../composables/useClientNow";
 
+declare const __LAST_COMMIT_EPOCH__: number;
+
 
 // 文档配置
 export const teekDocConfig: TeekConfig = {
@@ -103,7 +105,8 @@ const teekBlogCommonConfig: TeekConfig = {
       },
       {
         key: "lastActiveTime",
-        value: (originValue) => formatDiffDate(originValue, clientNow.value || undefined),
+        value: (originValue) =>
+          formatDiffDate(__LAST_COMMIT_EPOCH__ || originValue, clientNow.value || undefined),
       },
     ],
     statistics: {

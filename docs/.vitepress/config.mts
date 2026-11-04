@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import { execSync } from "node:child_process";
 import { defineTeekConfig } from "vitepress-theme-teek/config";
 import { version } from "vitepress-theme-teek/es/version";
 import { Wallpaper } from "./ConfigHyde/Wallaper"; // 导入Wallaper模块
@@ -35,6 +36,16 @@ const description = [
 ].toString();
 const CoverImgList = Cover; // 获取封面列表
 // const CoverBgList = Wallpaper; // 获取壁纸列表
+
+// doc-analysis 插件给出的 lastCommitTime 是没带时区的 "yyyy-MM-dd HH:mm:ss"，
+// 构建机与访客时区不同就会整体偏移，这里另取 epoch 毫秒作为准绳
+const lastCommitEpoch = (() => {
+  try {
+    return Number(execSync("git log -1 --format=%ct", { encoding: "utf8" }).trim()) * 1000;
+  } catch {
+    return 0;
+  }
+})();
 
  
 const teekConfig = defineTeekConfig({
@@ -427,6 +438,10 @@ export default defineConfig({
   },
 
   vite: {
+    define: {
+      __LAST_COMMIT_EPOCH__: JSON.stringify(lastCommitEpoch),
+    },
+
     server: {
       // host: "127.0.0.1", // 指定服务器应该监听哪个 IP 地址
       // port: 5173, // 指定开发服务器端口
