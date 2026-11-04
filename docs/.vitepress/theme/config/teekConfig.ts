@@ -1,5 +1,6 @@
 import type { TeekConfig } from "vitepress-theme-teek/config";
 import { version } from "vitepress-theme-teek/es/version";
+import { formatDiffDate, formatDiffDateToDay } from "vitepress-theme-teek";
 
 import { FooterInfo } from "../../ConfigHyde/FooterInfo"; //导入底部信息配置
 import { FriendLink } from "../../ConfigHyde/FriendLink"; // 导入FriendLink模块
@@ -8,6 +9,7 @@ import { Wallpaper } from "../../ConfigHyde/Wallaper"; // 导入Wallaper模块
 import { Cover } from "../../ConfigHyde/Cover"; // 导入Wallaper模块
 import { SocialDate } from "../../ConfigHyde/SocialDate"; // 导入SocialDate社交信息模块
 import { statisticsConfig } from "./stats"; // 自建站点统计
+import { clientNow } from "../composables/useClientNow";
 
 
 // 文档配置
@@ -90,6 +92,20 @@ const teekBlogCommonConfig: TeekConfig = {
     createTime: "2025-11-05",
     wordCount: true,
     readingTime: true,
+    // 相对时间默认在构建时算死，这里接上客户端时钟，让卡片随时间自己走
+    overrideInfo: [
+      {
+        key: "runtime",
+        value: (originValue, currentValue) => {
+          const days = formatDiffDateToDay(originValue, clientNow.value || undefined);
+          return days === 0 ? (currentValue as string) : `${days} 天`;
+        },
+      },
+      {
+        key: "lastActiveTime",
+        value: (originValue) => formatDiffDate(originValue, clientNow.value || undefined),
+      },
+    ],
     statistics: {
       // provider 仅用于让卡片展示访问量，真正的请求走 requestFn
       provider: "busuanzi",
