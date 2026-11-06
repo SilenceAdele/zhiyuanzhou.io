@@ -28,6 +28,7 @@
 @use "./blog-banner.scss" as *;// 独立控制白色背景的全屏下，导航栏文字、图标看不见问题
 
 @use "./home.scss" as *; //返回顶部小火箭css
+@use "./article-prose.scss" as *; // 文章正文通用排版（首行缩进、两端对齐）
 
 @use "./scrollbar-2.scss"; // 滚动条样式-2,渐变色滚动条
 

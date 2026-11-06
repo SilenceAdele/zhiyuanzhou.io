@@ -1,0 +1,12 @@
+// 文章正文通用排版：首行缩进两格、两端对齐。
+// 用法：在文章 frontmatter 加 `pageClass: article-prose` 即可复用。
+.article-prose .vp-doc p {
+  text-align: justify;
+  text-indent: 2em;
+}
+
+// 整段加粗的小标题（如“第一点，……”），保持加粗与左对齐
+.article-prose .vp-doc p.point-title {
+  text-align: left;
+  font-weight: 700;
+}
